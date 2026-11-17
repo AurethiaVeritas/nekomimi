@@ -2,9 +2,9 @@
 
 A self-hosted ASMR library and browser-based audio player. Keep your audio on your own server, browse your collection, and listen from desktop or mobile.
 
-![Nekomimi library showing search, content filters, and work cards](docs/screenshots/library.png)
+![Nekomimi library showing search, content filters, and work cards](docs/screenshots/library.jpg)
 
-*The screenshot uses fictional, all-ages demo entries. R-18 and R-15 are switched off; only SFW content is shown.*
+*Demo data is fictional.*
 
 ## Features
 
@@ -15,6 +15,16 @@ A self-hosted ASMR library and browser-based audio player. Keep your audio on yo
 - Listen with an integrated audio player and playback queue.
 - Choose which age ratings appear using independent SFW, R-15, and R-18 filters.
 - Keep your library private with cookie-based login and a local SQLite database.
+
+## More screenshots
+
+### Advanced Search
+
+![Advanced Search with circle, tag, and voice actor filters](docs/screenshots/search.jpg)
+
+### Settings
+
+![Settings for appearance, library paths, proxy, and automatic scans](docs/screenshots/settings.jpg)
 
 ## Quick start
 
@@ -32,8 +42,6 @@ Open **http://localhost:3000**. On first launch, read the account setup token in
 1. Open **Settings → Library Paths** and add an absolute path to your media library.
 2. Run **Scan Library**, or use **Add Work** to import a work manually.
 3. Browse **Home**, search your collection, and open a work to play its audio.
-
-For an all-ages view, keep **SFW** enabled and switch **R-15** and **R-18** off.
 
 ## Development
 
