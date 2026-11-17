@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nekomimi • Offline</title>
+    <meta name="theme-color" content="#0f172a" />
+    <style>
+      html, body { height: 100%; margin: 0; }
+      body { display: grid; place-items: center; background: #0f172a; color: #e5e7eb; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+      .card { text-align: center; max-width: 540px; padding: 28px 24px; background: #111827; border: 1px solid #1f2937; border-radius: 12px; }
+      h1 { margin: 0 0 8px; font-size: 20px; color: #f8fafc; }
+      p { margin: 0 0 16px; color: #cbd5e1; line-height: 1.45; }
+      button { appearance: none; padding: 10px 14px; border-radius: 10px; border: 1px solid #334155; background: #0ea5e9; color: #0b1327; font-weight: 600; cursor: pointer; }
+      button:active { transform: translateY(1px); }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Offline</h1>
+      <p>The app is offline and this page isn’t cached yet.<br/>Try again once you’ve opened the app at least once online.</p>
+      <button onclick="location.reload()">Retry</button>
+    </div>
+  </body>
+  </html>
+

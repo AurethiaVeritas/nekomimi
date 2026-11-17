@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": ".",
+    "noEmit": false,
+    "types": ["node"]
+  },
+  "include": [
+    "config/**/*.ts",
+    "filesystem/**/*.ts",
+    "scraper/**/*.ts",
+    "server/**/*.ts",
+    "types/**/*.d.ts"
+  ],
+  "exclude": ["client", "dist", "node_modules", "test", "vitest.config.ts"]
+}

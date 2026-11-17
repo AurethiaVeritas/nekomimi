@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node", "vitest/globals"]
+  },
+  "include": [
+    "config/**/*.ts",
+    "filesystem/**/*.ts",
+    "scraper/**/*.ts",
+    "server/**/*.ts",
+    "test/**/*.ts",
+    "types/**/*.d.ts",
+    "vitest.config.ts"
+  ],
+  "exclude": ["client", "dist", "node_modules"]
+}

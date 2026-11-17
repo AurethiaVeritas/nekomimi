@@ -1,0 +1,51 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.8/schema.json",
+  "files": {
+    "includes": [
+      "**",
+      "!!**/node_modules",
+      "!!**/dist",
+      "!!client/dev-dist",
+      "!!coverage",
+      "!!data",
+      "!!cover",
+      "!!.agent-screenshots",
+      "!!test-data*",
+      "!!test-covers*"
+    ]
+  },
+  "linter": {
+    "enabled": true,
+    "includes": [
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.mjs",
+      "**/*.cjs"
+    ],
+    "rules": {
+      "preset": "recommended",
+      "a11y": {
+        "noAutofocus": "off",
+        "noSvgWithoutTitle": "off",
+        "useMediaCaption": "off",
+        "useSemanticElements": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": {
+          "level": "error",
+          "options": {
+            "reportUnnecessaryDependencies": false
+          }
+        }
+      },
+      "style": {
+        "noNonNullAssertion": "off"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off"
+      }
+    }
+  }
+}

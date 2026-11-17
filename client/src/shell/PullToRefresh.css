@@ -1,0 +1,119 @@
+/* Pull-to-refresh indicator */
+.ptr-indicator {
+  position: fixed;
+  top: 0;
+  top: constant(safe-area-inset-top);
+  top: env(safe-area-inset-top);
+  left: 0;
+  right: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  background: transparent;
+  border-bottom: none;
+  z-index: 70;
+  pointer-events: none;
+  transition: opacity var(--transition-base);
+  transform-origin: top center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ptr-indicator .ptr-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-pill);
+  /* Floating ellipse styled like playerbar bubble */
+  background: rgba(15, 23, 42, 0.1);
+  border: 1px solid rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-soft);
+  color: var(--color-text-soft);
+  font-size: 0.95rem;
+  pointer-events: none;
+  min-width: 140px;
+  max-width: 86%;
+  justify-content: center;
+}
+
+.ptr-indicator .ptr-arrow,
+.ptr-indicator .ptr-spinner {
+  flex: none;
+  color: var(--color-accent);
+  /* rotation handled inline to avoid jank during slow pulls */
+  transition: filter var(--transition-base), opacity var(--transition-base);
+}
+
+.ptr-indicator .ptr-text {
+  color: var(--color-text-muted);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* spinner hidden until refreshing */
+.ptr-indicator .ptr-spinner {
+  display: none;
+}
+
+/* progress rotation handled inline by the component for smooth pulls */
+
+.ptr-indicator.ready .ptr-arrow {
+  opacity: 1;
+}
+
+.ptr-indicator.ready .ptr-text {
+  color: var(--color-accent-light);
+}
+
+.ptr-indicator.refreshing {
+  background: transparent;
+}
+
+.ptr-indicator.refreshing .ptr-arrow {
+  display: none;
+}
+
+.ptr-indicator.refreshing .ptr-spinner {
+  display: inline-block;
+  animation: ptr-spin 900ms linear infinite;
+  color: var(--color-accent-light);
+  opacity: 1 !important;
+}
+
+/* Light theme overrides for the PTR bubble */
+.light .ptr-indicator {
+  background: transparent;
+  border-bottom: none;
+}
+
+.light .ptr-indicator .ptr-inner {
+  background: rgba(255, 255, 255, 0.82);
+  border-color: rgba(226, 232, 240, 0.9);
+  color: var(--color-text-invert);
+}
+
+.light .ptr-indicator .ptr-arrow,
+.light .ptr-indicator .ptr-spinner {
+  color: var(--color-accent-strong);
+}
+
+@keyframes ptr-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile only: hide on larger screens */
+@media (min-width: 640px) {
+  .ptr-indicator {
+    display: none !important;
+  }
+}

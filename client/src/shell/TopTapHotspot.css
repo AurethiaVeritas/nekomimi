@@ -1,0 +1,21 @@
+/* Top tap hotspot */
+.top-tap-hotspot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 14px;
+  height: max(14px, constant(safe-area-inset-top));
+  height: max(14px, env(safe-area-inset-top));
+  z-index: 75;
+  padding: 0;
+  border: 0;
+  pointer-events: auto;
+  background: transparent;
+}
+
+@media (min-width: 640px) {
+  .top-tap-hotspot {
+    display: none;
+  }
+}

@@ -1,0 +1,55 @@
+/* The slot owns geometry even while its contents are skipped or unmounted.
+   Match the square cover plus metadata space used by useGridPageSize. Never
+   substitute an estimated intrinsic height when returning to a saved grid. */
+.grid-work-card {
+  position: relative;
+  align-self: start;
+  height: var(--grid-work-card-height, 520px);
+  content-visibility: auto;
+  min-width: 0;
+}
+
+.grid-work-card > .work-card,
+.grid-work-card__placeholder {
+  position: absolute;
+  inset: 0;
+  height: auto;
+}
+
+.grid-work-card__placeholder {
+  display: block;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-strong);
+}
+
+.grid-work-card .work-card__cover-wrapper,
+.grid-work-card .work-card__title,
+.grid-work-card .work-card__meta-list {
+  flex-shrink: 0;
+}
+
+.grid-work-card .work-card__content,
+.grid-work-card .work-card__tags {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Scrolling into a card should reveal it immediately, without staggered motion. */
+.grid-work-card .work-card {
+  animation: none;
+}
+
+.grid-loading-space {
+  position: relative;
+  width: 100%;
+  overflow-anchor: none;
+}
+
+.grid-loading-space__status {
+  position: sticky;
+  top: 45vh;
+  display: flex;
+  justify-content: center;
+  padding: var(--space-lg);
+}
