@@ -1,13 +1,14 @@
 Nekomimi Docker
 
-This repository includes a multi-stage Dockerfile and docker-compose to run the server and serve the built React client.
+The public image `ghcr.io/aurethiaveritas/nekomimi:edge` includes the server and built React client, with AMD64 and ARM64 support. No image build or registry login is required. The repository also includes a multi-stage Dockerfile for optional source builds.
 
 Quick start
 
-- Create the bind-mount directories as your current user, then build and run with Compose:
+- Download [docker-compose.yml](docker-compose.yml), configure your media mount as described below, and create the bind-mount directories as your current user. Pull and run the published image with Compose:
 
   - `mkdir -p data cover`
-  - `NEKOMIMI_UID="$(id -u)" NEKOMIMI_GID="$(id -g)" docker compose up --build -d`
+  - `docker compose pull`
+  - `NEKOMIMI_UID="$(id -u)" NEKOMIMI_GID="$(id -g)" docker compose up -d`
   - Open http://localhost:3000
 
 The container runs without root privileges. The image defaults to the `node` user
@@ -88,6 +89,7 @@ Reverse proxy setup
 
 Manual docker build/run
 
+- Building is optional. For a source build, clone the repository and run the following from its root. To use Compose with a source build, uncomment the `build` block in `docker-compose.yml`, change `image` to `nekomimi-asmr:latest`, then use `docker compose up --build -d` with the same UID/GID settings as above.
 - Build: `docker build -t nekomimi-asmr .`
 - Prepare bind mounts: `mkdir -p data cover`
 - Run: `docker run --rm --user "$(id -u):$(id -g)" -p 3000:3000 \

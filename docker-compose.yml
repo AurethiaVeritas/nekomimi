@@ -2,10 +2,11 @@
 
 services:
   nekomimi:
+    # Optional: uncomment build to build from source instead of pulling GHCR.
     # build:
     #   context: .
     #   dockerfile: Dockerfile
-    image: nekomimi-asmr:latest
+    image: ghcr.io/aurethiaveritas/nekomimi:edge
     container_name: nekomimi
     # Match these values to the owner of bind-mounted host directories when
     # UID/GID 1000 is not appropriate for the Docker host.

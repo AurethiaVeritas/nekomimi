@@ -30,12 +30,13 @@ A self-hosted ASMR library and browser-based audio player. Keep your audio on yo
 
 ## Quick start with Docker (recommended)
 
-Use the published image to run the server and web interface together. You only need Docker; Node.js and a source checkout are not required.
+Use the public image `ghcr.io/aurethiaveritas/nekomimi:edge` to run the server and web interface together. It supports AMD64 and ARM64. You only need Docker; building an image, installing Node.js, cloning the source, and signing in to GHCR are not required.
 
 Run this from the directory where you want to store Nekomimi's data. Replace `/absolute/path/to/your/library` with your media directory:
 
 ```bash
 mkdir -p data cover
+docker pull ghcr.io/aurethiaveritas/nekomimi:edge
 docker run -d \
   --name nekomimi \
   --restart unless-stopped \
@@ -63,7 +64,17 @@ Select **Initialize admin**, verify the token, and create an account with a pass
 
 Your database, settings, and accounts persist in `data/`; managed artwork persists in `cover/`. Back up both directories. Audio stays in your mounted library.
 
-## Build from source
+## Build your own Docker image (optional)
+
+If you want to customize the application, clone the source and run this from the repository root:
+
+```bash
+docker build -t nekomimi-local .
+```
+
+Use the same `docker run` command above, replacing `ghcr.io/aurethiaveritas/nekomimi:edge` with `nekomimi-local`. Keep the data, cover, and media mounts.
+
+## Build and run from source (optional)
 
 Requires **Node.js 20+**, **npm 9+**, and a local copy of the project source.
 
