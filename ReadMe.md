@@ -101,6 +101,10 @@ The running server provides interactive API documentation at **http://localhost:
 - [Docker deployment](DOCKER.md)
 - [Testing guide](test/README.md)
 
+## License
+
+Nekomimi is licensed under the [GNU Affero General Public License v3.0](LICENSE) (AGPL-3.0-only).
+
 ## Credits
 
 Thanks to Kikoeru for the scraper code.

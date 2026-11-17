@@ -48,5 +48,6 @@
     "@scarf/scarf@1.4.0": true,
     "fsevents@2.3.3": true,
     "esbuild@0.28.2": true
-  }
+  },
+  "license": "AGPL-3.0-only"
 }
