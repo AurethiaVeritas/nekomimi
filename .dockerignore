@@ -1,0 +1,24 @@
+node_modules
+npm-debug.log
+*.log
+Dockerfile*
+docker-compose*
+.git
+.gitignore
+**/.DS_Store
+
+# Documentation
+ReadMe.md
+AGENTS.md
+API.md
+
+# Client dev/build caches not needed for image context
+client/node_modules
+client/dev-dist
+client/dist
+
+# Tests and local media examples
+testMedia
+cover
+data
+

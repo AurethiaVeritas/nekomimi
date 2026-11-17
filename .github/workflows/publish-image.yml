@@ -1,0 +1,127 @@
+# Public GitHub workflow. Private registry builds live in .forgejo/workflows/.
+name: Build and publish GHCR image
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths:
+      - '.github/workflows/publish-image.yml'
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'package*.json'
+      - 'tsconfig*.json'
+      - 'vitest.config.ts'
+      - 'server/**'
+      - 'scraper/**'
+      - 'filesystem/**'
+      - 'config/**'
+      - 'types/**'
+      - 'client/**'
+      - 'test/**'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ghcr-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    if: github.server_url == 'https://github.com'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out public source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            client/package-lock.json
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm --prefix client ci
+      - name: Check types and run tests
+        run: |
+          npm run typecheck
+          npm --prefix client run typecheck
+          npm test
+
+  image:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Check out public source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node.js for release validation
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+      - name: Prepare image name and validate release version
+        id: image
+        env:
+          IMAGE_REPOSITORY: ${{ github.repository }}
+        run: |
+          echo "name=ghcr.io/${IMAGE_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+          node <<'JS'
+          if (process.env.GITHUB_REF.startsWith('refs/tags/')) {
+            const version = process.env.GITHUB_REF.slice('refs/tags/v'.length);
+            const semver = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?$/;
+            if (!semver.test(version) || version !== require('./package.json').version) {
+              throw new Error('Release tag must be v<package.json version> using semantic versioning.');
+            }
+          }
+          JS
+      - name: Extract image tags and labels
+        id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: ${{ steps.image.outputs.name }}
+          tags: |
+            type=raw,value=edge,enable=${{ github.ref == 'refs/heads/main' }}
+            type=semver,pattern={{version}}
+            type=sha,format=long
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@1f40c72289eff860ee54a304f1438e3cff362e0a # v4.3.0
+        with:
+          platforms: arm64
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - name: Log in to GHCR
+        if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build image and publish trusted refs
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: mode=min
