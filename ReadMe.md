@@ -4,8 +4,6 @@ A self-hosted ASMR library and browser-based audio player. Keep your audio on yo
 
 ![Nekomimi library showing search, content filters, and work cards](docs/screenshots/library.png)
 
-*Demo data is fictional.*
-
 ## Features
 
 - Scan local folders and match works by RJ code.
