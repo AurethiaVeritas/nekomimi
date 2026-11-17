@@ -2,7 +2,7 @@
 
 A self-hosted ASMR library and browser-based audio player. Keep your audio on your own server, browse your collection, and listen from desktop or mobile.
 
-![Nekomimi library showing search, content filters, and work cards](docs/screenshots/library.jpg)
+![Nekomimi library showing search, content filters, and work cards](docs/screenshots/library.png)
 
 *Demo data is fictional.*
 
@@ -20,11 +20,15 @@ A self-hosted ASMR library and browser-based audio player. Keep your audio on yo
 
 ### Advanced Search
 
-![Advanced Search with circle, tag, and voice actor filters](docs/screenshots/search.jpg)
+![Advanced Search with circle, tag, and voice actor filters](docs/screenshots/advanced-search.png)
+
+### Work details and playback queue
+
+![Work details, audio files, and the playback queue](docs/screenshots/work-details-queue.png)
 
 ### Settings
 
-![Settings for appearance, library paths, proxy, and automatic scans](docs/screenshots/settings.jpg)
+![Settings for appearance, library paths, proxy, and automatic scans](docs/screenshots/settings.png)
 
 ## Quick start
 
