@@ -28,7 +28,42 @@ A self-hosted ASMR library and browser-based audio player. Keep your audio on yo
 
 ![Settings for appearance, library paths, proxy, and automatic scans](docs/screenshots/settings.png)
 
-## Quick start
+## Quick start with Docker (recommended)
+
+Use the published image to run the server and web interface together. You only need Docker; Node.js and a source checkout are not required.
+
+Run this from the directory where you want to store Nekomimi's data. Replace `/absolute/path/to/your/library` with your media directory:
+
+```bash
+mkdir -p data cover
+docker run -d \
+  --name nekomimi \
+  --restart unless-stopped \
+  --user "$(id -u):$(id -g)" \
+  -p 3000:3000 \
+  --mount type=bind,source="$PWD/data",target=/data \
+  --mount type=bind,source="$PWD/cover",target=/app/cover \
+  --mount type=bind,source=/absolute/path/to/your/library,target=/library,readonly \
+  ghcr.io/aurethiaveritas/nekomimi:edge
+```
+
+The `edge` tag tracks builds from `main`. Replace it with a published version tag to pin a release. See the [Docker guide](DOCKER.md#public-github-images) for Compose deployment and image tags.
+
+Open **http://localhost:3000**. On first launch, get the account setup token from the container logs:
+
+```bash
+docker logs nekomimi
+```
+
+Select **Initialize admin**, verify the token, and create an account with a password of at least 12 characters.
+
+1. Open **Settings → Library Paths** and add `/library` (the path inside the container).
+2. Run **Scan Library**, or use **Add Work** to import a work manually.
+3. Browse **Home**, search your collection, and open a work to play its audio.
+
+Your database, settings, and accounts persist in `data/`; managed artwork persists in `cover/`. Back up both directories. Audio stays in your mounted library.
+
+## Build from source
 
 Requires **Node.js 20+**, **npm 9+**, and a local copy of the project source.
 
@@ -39,11 +74,7 @@ npm run build
 npm start
 ```
 
-Open **http://localhost:3000**. On first launch, read the account setup token in the server terminal, select **Initialize admin**, verify the token, and create an account with a password of at least 12 characters.
-
-1. Open **Settings → Library Paths** and add an absolute path to your media library.
-2. Run **Scan Library**, or use **Add Work** to import a work manually.
-3. Browse **Home**, search your collection, and open a work to play its audio.
+Open **http://localhost:3000** and use the account setup token printed in the server terminal to initialize your admin account. For source deployments, configure the media directory's absolute host path in **Settings → Library Paths**.
 
 ## Development
 
@@ -60,7 +91,7 @@ Open **http://localhost:5173**; Vite forwards API requests to the server on port
 
 Audio files stay in their original folders. Nekomimi stores its database, settings, and authentication files in `data/`, and managed artwork in `cover/`. Back up both directories. Use `DATA_DIR`, `COVER_DIR`, and `PORT` to override the defaults.
 
-A Dockerfile and Compose configuration are included in the source. Create writable `data/` and `cover/` directories, mount your media library, and run the container with the intended UID/GID.
+See the [Docker guide](DOCKER.md) for Compose, storage permissions, environment variables, and reverse proxy configuration.
 
 The running server provides interactive API documentation at **http://localhost:3000/api/docs**.
 
